@@ -17,6 +17,11 @@ class VendingMachine
     def initialize
       # 最初の自動販売機に入っている金額は0円
       @slot_money = 0
+          #最初の在庫としてインスタンス変数@drinkにコーラを５個持たせる
+      @drinks = []
+      5.times do
+        @drinks << ["コーラ", 120]
+      end
     end
     # 投入金額の総計を取得できる。
     def current_slot_money
@@ -32,6 +37,21 @@ class VendingMachine
       # 自動販売機にお金を入れる
       @slot_money += money
     end
+
+    def status      #drinkの名前、価格、本数をそれぞれ出力する
+      drinks = @drinks        #drinks << [["コーラ", 120], ["コーラ", 120], ["コーラ", 120], ["コーラ", 120], ["コーラ", 120]]
+      drink_kind = drinks.uniq  #重複する値の排除    drink_kind = [["コーラ", 120]]                      itself = 自分自身
+      stocks = drinks.group_by(&:itself).map do |key, value|  #値ごとにまとめてグループ化  drinks.group_by(&:itself) => {["コーラ", 120]: [["コーラ", 120], ["コーラ", 120], ["コーラ", 120], ["コーラ", 120]}
+                                                              #     .map do |key, value|  =>                             key       :               value   5個
+        "#{value.count}"                                      #     stocks = 5 [5]
+      end
+      i = 0                     #drink_kindの配列に、drinkが複数ある場合のインデックス番号
+      drink_kind.each do |d|    #drinkの名前、価格、本数をそれぞれ出力する
+        puts "ジュース名: #{d[0]}, 価格: #{d[1]}円, 在庫: #{stocks[i]}本"
+        i += 1
+      end
+    end
+
     # 払い戻し操作を行うと、投入金額の総計を釣り銭として出力する。
     def return_money
       # 返すお金の金額を表示する
