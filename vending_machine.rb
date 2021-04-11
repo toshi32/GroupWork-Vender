@@ -79,6 +79,19 @@ class VendingMachine
     end
   end
 
+  def stock_adjust(drink_kinds_index)
+    drinks = @drinks  #drinks << [["コーラ", 120], ["コーラ", 120], ["コーラ", 120], ["コーラ", 120], ["コーラ", 120]]
+    i = 0              #drinksのインデックス番号を扱う変数
+    drinks.each do |d|  #drinksの各値を引数と比較していく
+      if d == drink_kinds_index   # ["コーラ", 120] と drink_kinds_index が同じか？
+        drinks.delete_at i        # 同じであればdrinksのインデックス番号 i を削除する
+        p drinks
+        return
+      end
+    i += 1
+    end
+  end
+
   def status      #drinkの名前、価格、本数をそれぞれ出力する
     drinks = @drinks        #drinks << [["コーラ", 120], ["コーラ", 120], ["コーラ", 120], ["コーラ", 120], ["コーラ", 120]]
     drink_kind = drinks.uniq  #重複する値の排除    drink_kind = [["コーラ", 120]]                      itself = 自分自身
