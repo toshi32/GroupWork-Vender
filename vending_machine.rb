@@ -101,8 +101,8 @@ class VendingMachine
     drinks = @drinks        #drinks << [["コーラ", 120], ["コーラ", 120], ["コーラ", 120], ["コーラ", 120], ["コーラ", 120]]
     drink_kind = drinks.uniq  #重複する値の排除    drink_kind = [["コーラ", 120]]                      itself = 自分自身
     stocks = drinks.group_by(&:itself).map do |key, value|  #値ごとにまとめてグループ化  drinks.group_by(&:itself) => {["コーラ", 120]: [["コーラ", 120], ["コーラ", 120], ["コーラ", 120], ["コーラ", 120]}
-                                                            #     .map do |key, value|  =>                             key       :               value   5個
-      "#{value.count}"                                      #     stocks = 5 [5]
+                                                          #     .map do |key, value|  =>                             key       :               value   5個
+      "#{value.count}"                                    #     stocks = 5 [5]
     end
     i = 0                     #stocksに格納されている在庫数のインデックス番号
     drink_kind.each do |d|    #drinkの名前、価格、本数をそれぞれ出力する
