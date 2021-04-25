@@ -1,10 +1,10 @@
 # irb
-# require '/Users/nagasan/text_files/vending_machine.rb'
+# require '/Users/nagasan/text_files/vending_machine2.rb'
 # （↑のパスは、自動販売機ファイルが入っているパスを指定する）
 # 初期設定（自動販売機インスタンスを作成して、vmという変数に代入する）
 # vm = VendingMachine.new
 # 作成した自動販売機に100円を入れる
-# vm.slot_money (100)
+# vm.slot_money(100)
 # 作成した自動販売機に入れたお金がいくらかを確認する（表示する）
 # vm.current_slot_money
 # 作成した自動販売機に入れたお金を返してもらう
@@ -21,7 +21,6 @@ class VendingMachine
     @drinks = []    #最初の在庫としてインスタンス変数@drinkにコーラを５個持たせる
     5.times do
       @drinks << ["コーラ", 120]
-      @drinks << ["redbull", 180]
     end
   end
 
@@ -39,7 +38,7 @@ class VendingMachine
     can_buy_drinks << ["#{i}", "購入しない"]  #can_buy_drinksの最後行に、購入しない選択肢を追加
     if can_buy_drinks[1]    #can_buy_drinksに値が2つ以上あれば、購入ステップへ移行する。最後行に購入しない選択肢を追加している為、購入できる飲み物が０種類であれば値は１つになる。
       while true
-        puts "購入したい飲み物の数字を選んでください。"
+        puts "購入する飲み物の数字を選んでください。"
         can_buy_drinks.each do |d|    #購入可能な飲み物リストを１行ずつ表示
           print d
           puts "\n"                   #1行ずつ改行を入れる
@@ -51,7 +50,7 @@ class VendingMachine
         p not_buy
         p not_buy[0].class
         if confirm_buy == not_buy  #"購入しない"を選択していたら処理を終了する
-          puts "購入をやめました"
+          puts "購入をやめました。"
           return
         else
           if confirm_buy =~ /^[0-9]+$/ #文字列の0~9にマッチする場合のみ処理を続ける。=~で右辺左辺の一致を確認。 ^は直後の文字が行の先頭にあるのを確認。$は直前の文字が行の末尾にあるのを確認。つまり、数字以外の入力を排除しているということ。ジャンケンゲームの課題より引用。
@@ -64,19 +63,42 @@ class VendingMachine
               drink_price = argument[1]   #drinkの金額を取得。
               @sold_amount += drink_price   #drinkの金額を売上合計に足す。
               @slot_money -= argument[1]    #所持金からdrinkの金額を減らす。
-              puts "#{argument[0]}を購入しました"
+              puts "#{argument[0]}を購入しました。"
               return
             else
-              puts "入力した値が飲み物の番号と一致しませんでした"
+              puts "入力した値が飲み物の番号と一致しませんでした。"
             end
           else
-            puts "数字で番号を入力してください"
+            puts "数字で番号を入力してください。"
           end
         end
       end
     else
       puts "購入できる飲み物がありませんでした。"
     end
+  end
+
+  def can_buy_list  #購入可能な飲み物をリスト表示する
+    drinks = @drinks      #drinks << [["コーラ", 120], ["コーラ", 120], ["コーラ", 120], ["コーラ", 120], ["コーラ", 120]]
+    drink_kind = drinks.uniq    #重複する値の排除    drink_kind = [["コーラ", 120]]
+    can_buy_drinks = []       #購入可能リストの配列作成
+    i = 0                     #can_buy_drinks用のインデックス番号作成
+    drink_kind.each do |d|    #drink_kindの値をそれぞれ個別に処理する
+      if d[1] < @slot_money   #投入金額が各飲み物の価格より高ければ、下の処理でcan_buy_drinkに追加する
+        can_buy_drinks << ["#{d[0]} : #{d[1]}円"]
+        i += 1        #can_buy_drinksに飲み物を加えるたびにインデックス番号を１つずつ増やす
+      end
+    end
+    if can_buy_drinks[0]
+      puts "現在購入できる飲み物を表示します。"
+      can_buy_drinks.each do |d|
+        print d
+        puts "\n"
+      end
+    else
+      puts "現在の投入金額で購入できる飲み物はありません。"
+    end
+    return
   end
 
   def stock_adjust(drink_kinds_index)
@@ -101,8 +123,8 @@ class VendingMachine
     drinks = @drinks        #drinks << [["コーラ", 120], ["コーラ", 120], ["コーラ", 120], ["コーラ", 120], ["コーラ", 120]]
     drink_kind = drinks.uniq  #重複する値の排除    drink_kind = [["コーラ", 120]]                      itself = 自分自身
     stocks = drinks.group_by(&:itself).map do |key, value|  #値ごとにまとめてグループ化  drinks.group_by(&:itself) => {["コーラ", 120]: [["コーラ", 120], ["コーラ", 120], ["コーラ", 120], ["コーラ", 120]}
-                                                          #     .map do |key, value|  =>                             key       :               value   5個
-      "#{value.count}"                                    #     stocks = 5 [5]
+                                                            #     .map do |key, value|  =>                             key       :               value   5個
+      "#{value.count}"                                      #     stocks = 5 [5]
     end
     i = 0                     #stocksに格納されている在庫数のインデックス番号
     drink_kind.each do |d|    #drinkの名前、価格、本数をそれぞれ出力する
@@ -111,10 +133,36 @@ class VendingMachine
     end
   end
 
+  def add_stocks
+    puts "在庫を増やしたい商品を選んで入力して下さい。やめる時は「なし」と入力して下さい。"
+    drinks_name = ["コーラ", "redbull", "水"]
+    drink = ""
+    puts drinks_name
+    drink_name = gets
+    if drink_name == "コーラ\n"
+      drink = ["コーラ", 120]
+    elsif drink_name == "redbull\n"
+      drink = ["redbull", 200]
+    elsif drink_name == "水\n"
+      drink = ["水", 100]
+    elsif drink_name == "なし"
+      puts "在庫追加を取り消しました"
+      return
+    else
+      puts "#{drink_name}は在庫にありませんでした。"
+      return
+    end
+    5.times do
+      @drinks << drink
+    end
+    puts "#{drink[0]} : #{drink[1]}円 を5本追加しました。"
+  end
+
   # 投入金額の総計を取得できる。
   def current_slot_money
+    slot_money = @slot_money
     # 自動販売機に入っているお金を表示する
-    @slot_money
+    puts "投入金額 : #{slot_money}円"
   end
   # 10円玉、50円玉、100円玉、500円玉、1000円札を１つずつ投入できる。
   # 投入は複数回できる。
@@ -124,11 +172,15 @@ class VendingMachine
     return false unless MONEY.include?(money)
     # 自動販売機にお金を入れる
     @slot_money += money
+    puts "#{money}円入金しました。"
+    can_buy_list
   end
+
   # 払い戻し操作を行うと、投入金額の総計を釣り銭として出力する。
   def return_money
+    slot_money = @slot_money
     # 返すお金の金額を表示する
-    puts @slot_money
+    puts "おつり : #{slot_money}円"
     # 自動販売機に入っているお金を0円に戻す
     @slot_money = 0
   end
