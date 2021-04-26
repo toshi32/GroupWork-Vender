@@ -1,4 +1,3 @@
-# irb
 # require '/Users/nagasan/text_files/vending_machine2.rb'
 # （↑のパスは、自動販売機ファイルが入っているパスを指定する）
 # 初期設定（自動販売機インスタンスを作成して、vmという変数に代入する）
@@ -79,7 +78,7 @@ class VendingMachine
   end
 
   def can_buy_list  #購入可能な飲み物をリスト表示する
-    drinks = @drinks      #drinks << [["コーラ", 120], ["コーラ", 120], ["コーラ", 120], ["コーラ", 120], ["コーラ", 120]]
+    drinks = @drinks
     drink_kind = drinks.uniq    #重複する値の排除    drink_kind = [["コーラ", 120]]
     can_buy_drinks = []       #購入可能リストの配列作成
     i = 0                     #can_buy_drinks用のインデックス番号作成
@@ -138,12 +137,12 @@ class VendingMachine
     drinks_name = ["コーラ", "redbull", "水"]
     drink = ""
     puts drinks_name
-    drink_name = gets
-    if drink_name == "コーラ\n"
+    drink_name = gets.chomp!
+    if drink_name == "コーラ"
       drink = ["コーラ", 120]
-    elsif drink_name == "redbull\n"
+    elsif drink_name == "redbull"
       drink = ["redbull", 200]
-    elsif drink_name == "水\n"
+    elsif drink_name == "水"
       drink = ["水", 100]
     elsif drink_name == "なし"
       puts "在庫追加を取り消しました"
