@@ -1,4 +1,4 @@
-# require './work/sample.rb'
+# require './GroupWork/vending_machine.rb'
 # （↑のパスは、自動販売機ファイルが入っているパスを指定する）
 # 初期設定（自動販売機インスタンスを作成して、vmという変数に代入する）
 # vm = VendingMachine.new
@@ -59,4 +59,4 @@ class VendingMachine
       # 自動販売機に入っているお金を0円に戻す
       @slot_money = 0
     end
-  end
+end
